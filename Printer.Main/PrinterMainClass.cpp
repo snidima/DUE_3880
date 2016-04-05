@@ -1,4 +1,4 @@
-#include "Printer.h"
+#include <PrinterMainClass.h>
 
 
 /**
@@ -7,6 +7,7 @@
 void PrinterMain::init()
 {	
 	leds.init();
+	epson.init();
 
 	pinMode( BTN_EPSON, INPUT );
 
