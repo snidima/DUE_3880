@@ -17,8 +17,8 @@
 #define RELE_EPSON     46
 
 //Концевики
-#define LIMITER_START  37
-#define LIMITER_FINISH 39
+#define LIMITER_START  39
+#define LIMITER_FINISH 37
 
 //Датчики Epson
 #define SENSOR_PD      31
@@ -48,11 +48,11 @@
 //Диаметр вала протяжки бумаги Epson, мм
 #define EPSON_SHAFT_DIAMETER 8
 //Количество шагов в одном обороте ШД
-#define MOTOR_STEPS_DPI      1600
+#define MOTOR_STEPS_DPI      6400
 //Диаметр муфты для ШД, мм
 #define MOTOR_SHAFT_DIAMETER 55
 //Скорость движения ШД, микросекунд на один шаг
-#define MOTOR_SPEED          350
+#define MOTOR_SPEED          270
 
 
 

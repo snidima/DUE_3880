@@ -11,6 +11,8 @@ void PrinterMain::init()
 	motor.init();	
 	btns.init();	
 	limiters.init();
+
+	leds.blinkOn( BLUE, 400 );
 }
 
 
@@ -23,41 +25,53 @@ void PrinterMain::main()
 {
 	if ( epson.isPowerOn() ){
 
+		leds.blinkOff( BLUE );
+		leds.on( BLUE );
+		epson.pdSensorEmulate();
+		epson.pfSensor( OFF );
 		unsigned long currentMillis = millis();
 
-		/*******Включение ШД, одноразовые действия*******/
+		
 		if ( _steps_of_init == 0 ) {
 
+
 			motor.on();
-			// epson.pfSensor( ON );
+			
 
 			_steps_of_init = 1;
-			delay(500);
+			delay(2000);
 		}
 		
-		/*******Моргать светом на 1 и 2 шаге инициализации*******/
-		if ( ( _steps_of_init == 1 ) || (_steps_of_init == 2) )
-			leds.blinkOn( BLUE, 400 );
+		
+		if ( _steps_of_init <= 2 )
+			leds.blinkOn( ORANGE, 400 );
 
-		/*******Включить эмуляцию датчика PD*******/
-		// if ( ( _steps_of_init == 1 ) || (_steps_of_init == 2) )
-			epson.pdSensorEmulate();
 
-		/*******Светить, когда инициализация прошла успешно*******/
-		if ( _steps_of_init == 3 )
-			leds.on( BLUE );
+		
+		if ( _steps_of_init == 3 ){
+			leds.blinkOff( ORANGE );
+			_steps_of_init = 4;
+		}
+
+		// if ( _steps_of_init == 4 )
+		// 	leds.on( GREEN );
+
+		if ( _steps_of_init == 4 ){
+			if ( ( btns.isPressed( BTN3 ) ) && ( !btns.isPressed( BTN2 ) ) ) motor.manualMove( TO_START, true );
+			if ( ( btns.isPressed( BTN2 ) ) && ( !btns.isPressed( BTN3 ) ) ) motor.manualMove( TO_FINISH, true );
+		}
 
 
 		/*******Движение к концу*******/
 		if ( _steps_of_init == 1 ){
 			_OldMillis = currentMillis;
-			if ( !motor.finish ) motor.manualMove( TO_FINISH ); else _steps_of_init = 2;
+			if ( !limiters.isLimit( FINISH ) ) motor.manualMove( TO_FINISH, false ); else _steps_of_init = 2;
 		}
 
 		/*******Движение к началу*******/
 		if ( currentMillis - _OldMillis >= 1000 )
 			if ( _steps_of_init == 2 ){
-				if ( !motor.start ) motor.manualMove( TO_START ); else _steps_of_init = 3;
+				if ( !limiters.isLimit( START ) ) motor.manualMove( TO_START, false ); else _steps_of_init = 3;
 			
 
 		}
@@ -68,13 +82,13 @@ void PrinterMain::main()
 
 	} else {
 
-
+		_steps_of_init = 0;
 		motor.off();
-		leds.off( RED );
-		leds.off( GREEN );
-		leds.off( BLUE );
-		leds.off( ORANGE );
-
+		leds.blinkOn( BLUE, 400 );
+		// leds.off( RED );
+		// leds.off( GREEN );
+		// // leds.off( BLUE );
+		// leds.off( ORANGE );
 
 	}
 }

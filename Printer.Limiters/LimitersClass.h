@@ -15,7 +15,7 @@ class LimitersClass
 {
 
 	private:
-		
+		int k, j;
 
 	public:
     void init();

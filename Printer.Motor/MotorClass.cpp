@@ -13,7 +13,6 @@ void MotorClass::init()
   pinMode( MOTOR_ENB, OUTPUT );
   pinMode( RELE_DRIVER, OUTPUT );
   digitalWrite( RELE_DRIVER, LOW);
-
 }
 
 
@@ -49,7 +48,7 @@ void MotorClass::off()
 /**
 *
 */
-void MotorClass::manualMove( bool dir )
+void MotorClass::manualMove( bool dir , bool control_limit)
 {
 
   unsigned long currentMillis = micros();
@@ -69,13 +68,14 @@ void MotorClass::manualMove( bool dir )
         _dir_manual_state = 0;
       }
 
-      start  = limiters.isLimit( START );
-      finish = limiters.isLimit( FINISH );
-        
-      if ( ( ( dir == 0 ) && ( !start ) ) || ( ( dir == 1 ) && ( !finish ) ) )
+
+      if ( control_limit ){
+        start  = limiters.isLimit( START );
+        finish = limiters.isLimit( FINISH );
+          
+        if ( ( ( dir == 0 ) && ( !start ) ) || ( ( dir == 1 ) && ( !finish ) ) )
+          digitalWrite( MOTOR_STEP, _step__manual_state);
+      } else
         digitalWrite( MOTOR_STEP, _step__manual_state);
-
-      
-
     }
 }

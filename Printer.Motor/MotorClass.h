@@ -27,5 +27,5 @@ class MotorClass
 		void init();
 		void on();
 		void off();		
-		void manualMove( bool );
+		void manualMove( bool, bool );
 };
