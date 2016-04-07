@@ -4,6 +4,7 @@
 
 #define TO_START     0
 #define TO_FINISH    1
+#define ENCODER      1
 
 class MotorClass
 {
@@ -32,5 +33,6 @@ class MotorClass
 		void on();
 		void off();		
 		bool move( bool );
+		bool move( bool, bool );
 		bool moveToZero( int );
 };

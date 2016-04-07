@@ -46,9 +46,7 @@ void MotorClass::off()
 
 
 
-/**
-*
-*/
+
 bool MotorClass::move( bool dir )
 {
 
@@ -89,6 +87,26 @@ bool MotorClass::move( bool dir )
       }
 
     } else return false;
+}
+
+
+
+bool MotorClass::move( bool dir, bool enc )
+{
+
+  if ( ( dir == 0 ) && ( _dir_manual_state == 0 ) ){
+    digitalWrite( MOTOR_DIR, LOW);
+    _dir_manual_state = 1;
+  }
+
+  if ( dir == 0 ){
+    _current_cnt++;
+    if ( _current_cnt < _table_cnt ) {
+      digitalWrite( MOTOR_STEP, LOW);
+      digitalWrite( MOTOR_STEP, HIGH);
+      return true;
+    } else return false;
+  }
 }
 
 bool MotorClass::moveToZero( int zero )

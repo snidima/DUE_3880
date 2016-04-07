@@ -3,7 +3,8 @@
 #include <MotorClass.h>
 #include <BtnsClass.h>
 #include <LimitersClass.h>
-
+#include <EncoderHelperClass.h>
+#include <Encoder.h>
 
 class PrinterMain
 {
@@ -14,11 +15,14 @@ class PrinterMain
     MotorClass motor;
     BtnsClass btns;
     LimitersClass limiters;
+    EncoderHelperClass encoder;
 
     byte _steps_of_init = 0;
-    int _steps_count_for_init = 0;
 
     unsigned long _OldMillis = 0;
+
+    long _oldPosition;
+
 
 
 	public:

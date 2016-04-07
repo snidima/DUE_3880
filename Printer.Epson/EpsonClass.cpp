@@ -8,7 +8,7 @@
 void EpsonClass::init()
 {
 	pinMode( SENSOR_PD, OUTPUT );
-	// pinMode( SENSOR_PF, OUTPUT );
+	pinMode( SENSOR_PF, OUTPUT );
 	pinMode( BTN_EPSON, INPUT );
 	pinMode( RELE_EPSON, OUTPUT );
 	pinMode( ENCODER_A, INPUT );
@@ -65,14 +65,14 @@ void EpsonClass::pdSensorEmulate()
 */
 void EpsonClass::pfSensor( byte state )
 {
-	if ( (state == 1) && (_pf_state == 0) ){
+	if ( (state == 1/*) && (_pf_state == 0*/) ){
 		digitalWrite( SENSOR_PF, HIGH );
-		_pf_state = 1;
+	// 	_pf_state = 1;
 	}
 
-	if ( (state == 0) && (_pf_state == 1) ){
+	if ( (state == 0/*) && (_pf_state == 1*/) ){
 		digitalWrite( SENSOR_PF, LOW );
-		_pf_state = 0;
+		// _pf_state = 0;
 	}
 
 }
