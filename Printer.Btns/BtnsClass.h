@@ -6,14 +6,23 @@
 #define BTN3   3
 #define BTN4   4
 
+#define SHORT   10000
+#define LONG    50000
+#define LONGEST 200000
+
 class BtnsClass
 {
 
 	private:
-		
+    int _btn_1,
+        _btn_2,
+        _btn_3,
+        _btn_4;
+
+    bool _isPress( byte, int );
 
 	public:
     void init();
-		bool isPressed( byte );
+		bool isPress( byte, int );
 			
 };

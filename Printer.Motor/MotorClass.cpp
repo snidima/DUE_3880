@@ -23,6 +23,7 @@ void MotorClass::init()
 void MotorClass::on()
 {
   if ( _enb_state == false ){
+    delay(2000);
     digitalWrite( RELE_DRIVER, HIGH);
     digitalWrite( MOTOR_ENB, LOW);
     _enb_state = !_enb_state;
@@ -48,34 +49,62 @@ void MotorClass::off()
 /**
 *
 */
-void MotorClass::manualMove( bool dir , bool control_limit)
+bool MotorClass::move( bool dir )
 {
 
   unsigned long currentMillis = micros();
 
   if ( currentMillis - _previousMillis_manual_move >= speed ) {
       _previousMillis_manual_move = currentMillis;
+
       _step__manual_state = !_step__manual_state;
 
+
+      /***********/
       if ( ( dir == 0 ) && ( _dir_manual_state == 0 ) ){
         digitalWrite( MOTOR_DIR, LOW);
         _dir_manual_state = 1;
       }
-      
-
       if ( ( dir == 1 ) && ( _dir_manual_state == 1 ) ){
         digitalWrite( MOTOR_DIR, HIGH);
         _dir_manual_state = 0;
       }
+       /***********/
 
-
-      if ( control_limit ){
-        start  = limiters.isLimit( START );
-        finish = limiters.isLimit( FINISH );
-          
-        if ( ( ( dir == 0 ) && ( !start ) ) || ( ( dir == 1 ) && ( !finish ) ) )
-          digitalWrite( MOTOR_STEP, _step__manual_state);
-      } else
+      if ( !_limiters_detected ){
         digitalWrite( MOTOR_STEP, _step__manual_state);
-    }
+        if ( _step__manual_state ) return true; else return false;
+      } else {
+
+        if ( ( dir == 0 ) && ( _current_cnt != _table_cnt ) ) {
+          digitalWrite( MOTOR_STEP, _step__manual_state);
+          if ( _step__manual_state ) _current_cnt++;
+        }
+
+        if ( ( dir == 1 ) && ( _current_cnt != 0 ) ) {
+          digitalWrite( MOTOR_STEP, _step__manual_state);
+          if ( _step__manual_state ) _current_cnt--;
+        }
+
+      }
+
+    } else return false;
 }
+
+bool MotorClass::moveToZero( int zero )
+{
+
+  if ( _current_cnt != zero ){
+
+    if ( _current_cnt < zero )
+      move( TO_START );
+
+    if ( _current_cnt > zero )
+      move( TO_FINISH );
+
+    return false;
+
+  } else return true;
+  
+}
+

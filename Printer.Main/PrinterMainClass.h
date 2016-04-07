@@ -20,9 +20,11 @@ class PrinterMain
 
     unsigned long _OldMillis = 0;
 
+
 	public:
 		void init();
     void main();
+    void testMode();
     
 
 };

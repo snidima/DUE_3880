@@ -20,12 +20,17 @@ class MotorClass
 									_step__manual_state = 0;
 
 
+
+
 	public:
-		bool 	start = 0,
-					finish = 0;
+		int _table_cnt = 0, 
+				_current_cnt = 0,
+				_zero = 0;
+		bool _limiters_detected = 0;
 
 		void init();
 		void on();
 		void off();		
-		void manualMove( bool, bool );
+		bool move( bool );
+		bool moveToZero( int );
 };
