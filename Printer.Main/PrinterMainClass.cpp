@@ -8,19 +8,18 @@ void PrinterMain::init()
 	motor.init();	
 	btns.init();	
   limiters.init();
-
-
+  ultrasonic.init();
 }
 
 
 
 void PrinterMain::main()
 {
-  
+  unsigned long currentMillis;
     
 	if ( epson.isPowerOn() ){
 
-		unsigned long currentMillis = millis();
+		currentMillis = millis();
 
     
 		
@@ -37,8 +36,6 @@ void PrinterMain::main()
 			epson.pfSensor( OFF );
 
 			_steps_of_init = 1;
-
-			delay(2000);
 		}
 		
 		
@@ -58,9 +55,8 @@ void PrinterMain::main()
       } 
 
       currentMillis = millis();
-      if ( currentMillis - _printer_off >= 1000 * 52) 
+      if ( currentMillis - _printer_off >= 1000 * EPSON_READY_TIME ) 
             _printer_ready = true;
-
     }
       
 
@@ -108,11 +104,13 @@ void PrinterMain::main()
         leds.blinkOn( ORANGE, 400 );
       }
 
+
       if ( _steps_of_init == 6 ){
         if ( motor.moveToZero( 0 ) ) _steps_of_init = 4;
         if ( btns.isPress( BTN4, SHORT ) ) _steps_of_init = 4;
         leds.blinkOn( ORANGE, 400 );
       }
+
 
       if ( _steps_of_init == 7 ){
         leds.blinkOn( ORANGE, 400 );
@@ -120,21 +118,16 @@ void PrinterMain::main()
         if ( btns.isPress( BTN4, LONG ) ) _steps_of_init = 4;
       }
 
+
       if ( _steps_of_init == 8 ){
         leds.blinkOff( ORANGE );
         leds.blinkOn( GREEN, 400 );
         if ( btns.isPress( BTN4, LONG ) ) _steps_of_init = 4;
-        
-        
-
         if ( encoder.isStartPrinting() ) { _steps_of_init = 9;_OldMillis = millis(); epson.pfSensor( ON ); }
-
       }
 
       if ( _steps_of_init == 9 ){
-        
         epson.pdSensorEmulate();
-
         currentMillis = millis();
       if ( currentMillis - _OldMillis >= 100 ) { _steps_of_init = 10; _OldMillis = currentMillis; }
       }
@@ -165,12 +158,14 @@ void PrinterMain::main()
 
 	} else {
 
+    motor.off();
+    leds.blinkOn( BLUE, 400 );
+    epson.pfSensor( OFF );
+    
 		_steps_of_init = 0;
-		motor.off();
-		leds.blinkOn( BLUE, 400 );
     _printer_ready = false;
-    unsigned long _printer_off = millis();
-
+    _printer_off = millis();
+		
 	}
 }
 
@@ -179,6 +174,9 @@ void PrinterMain::main()
 void PrinterMain::testMode()
 {
 
-
+  if ( ultrasonic.getDistance() <= 10 )
+    leds.on( RED );
+  else
+    leds.off( RED );
   
 }

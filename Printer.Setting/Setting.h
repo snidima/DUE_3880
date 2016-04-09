@@ -36,6 +36,9 @@
 #define MOTOR_DIR      25
 #define MOTOR_ENB      27
 
+//Ultrasonic
+#define TRIG           33
+#define ECHO           35
 
 
 
@@ -61,5 +64,6 @@
 /**************ДРУГИЕ НАСТРОЙКИ**************/
 
 //Время срабатывания кнопки включения Epson, количество итераций
-#define EPSON_BTN_POWER_TIME 200000
-
+#define EPSON_BTN_POWER_TIME 50000
+//Время инициализации Epson, сек
+#define EPSON_READY_TIME     52
