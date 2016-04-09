@@ -16,7 +16,8 @@ void EncoderHelperClass::init()
 bool EncoderHelperClass::isMove()
 {
   long newPosition = encoder->read();
-  if (newPosition != _oldPosition) {
+  if ( (newPosition == 2160) || (newPosition == -2160) ) encoder->write( 0 );
+  if (newPosition < _oldPosition) {
     _oldPosition = newPosition;
     return true;
   } else return false;
@@ -41,7 +42,7 @@ bool EncoderHelperClass::isStep()
 
 bool EncoderHelperClass::isStepCalc()
 {
-  if ( _step_cnt >= 2159 ) _step_cnt = 0;
+  if ( _step_cnt == 2160 ) _step_cnt = 0;
   long cnt = _step_cnt * 100000;
   if ( (cnt % 928125) <= 100000) return true; else return false;
 }

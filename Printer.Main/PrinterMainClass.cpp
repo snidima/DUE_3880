@@ -16,10 +16,11 @@ void PrinterMain::init()
 
 void PrinterMain::main()
 {
+  
     
 	if ( epson.isPowerOn() ){
 
-		unsigned long currentMillis;
+		unsigned long currentMillis = millis();
 
     
 		
@@ -48,11 +49,19 @@ void PrinterMain::main()
 			if ( !limiters.isLimit( FINISH ) ) motor.move( TO_FINISH ); else {_steps_of_init = 2; _OldMillis = millis(); }
 		
 
-    if ( _steps_of_init < 4 )
-      leds.blinkOn( ORANGE, 400 );
       
-    if ( _steps_of_init <= 4 )
-      epson.pdSensorEmulate();
+      
+    if ( _steps_of_init <= 4 ){
+      if ( !_printer_ready ){
+        epson.pdSensorEmulate();
+        leds.blinkOn( ORANGE, 400 );
+      } 
+
+      currentMillis = millis();
+      if ( currentMillis - _printer_off >= 1000 * 52) 
+            _printer_ready = true;
+
+    }
       
 
 
@@ -66,35 +75,42 @@ void PrinterMain::main()
             motor._current_cnt = motor._table_cnt;
           } 
 
-        } else { _steps_of_init = 4; motor._limiters_detected = true; }
+        } else {
+          _steps_of_init = 4; 
+          motor._limiters_detected = true; 
+        }
+        
 			
 
 		}
 
 
-    if ( _steps_of_init == 4 ){
-      leds.blinkOff( ORANGE );
+    if ( (_steps_of_init == 4) ){
+
+      if ( _printer_ready )
+        leds.blinkOff( ORANGE );
+
       leds.blinkOff( GREEN );
 
       if ( btns.isPress( BTN3, SHORT ) ) motor.move( TO_START );
       if ( btns.isPress( BTN2, SHORT ) ) motor.move( TO_FINISH );
       if ( btns.isPress( BTN1, LONG  ) ) _steps_of_init = 7;
 
-      if ( btns.isPress( BTN3, LONG  ) ) _steps_of_init = 5;
-      if ( btns.isPress( BTN2, LONG  ) ) _steps_of_init = 6;
+      if ( btns.isPress( BTN3, LONGEST  ) ) _steps_of_init = 5;
+      if ( btns.isPress( BTN2, LONGEST  ) ) _steps_of_init = 6;
 
     }
 
       
       if ( _steps_of_init == 5 ){
         if ( motor.moveToZero( motor._table_cnt ) ) _steps_of_init = 4;
-        if ( btns.isPress( BTN4, LONG ) ) _steps_of_init = 4;
+        if ( btns.isPress( BTN4, SHORT ) ) _steps_of_init = 4;
         leds.blinkOn( ORANGE, 400 );
       }
 
       if ( _steps_of_init == 6 ){
         if ( motor.moveToZero( 0 ) ) _steps_of_init = 4;
-        if ( btns.isPress( BTN4, LONG ) ) _steps_of_init = 4;
+        if ( btns.isPress( BTN4, SHORT ) ) _steps_of_init = 4;
         leds.blinkOn( ORANGE, 400 );
       }
 
@@ -120,21 +136,30 @@ void PrinterMain::main()
         epson.pdSensorEmulate();
 
         currentMillis = millis();
-      if ( currentMillis - _OldMillis >= 100 ) _steps_of_init = 10;
+      if ( currentMillis - _OldMillis >= 100 ) { _steps_of_init = 10; _OldMillis = currentMillis; }
       }
     
-      /****Печать****/
+      
       if ( _steps_of_init == 10 ){
         epson.pdSensorEmulate();
         leds.blinkOn( GREEN, 400 );
 
-        if ( encoder.isStep() )
-          if ( !motor.move( TO_START, ENCODER ) ) _steps_of_init = 10;
+        currentMillis = millis();
+        if ( currentMillis - _OldMillis >= 2000 ) _steps_of_init = 11;
       }
 
-      if ( _steps_of_init == 11 ){
+      /****Печать****/
+      if (_steps_of_init == 11){
+        leds.blinkOn( GREEN, 400 );
+        if ( encoder.isStep() )
+          if ( !motor.move( TO_START, ENCODER ) ) _steps_of_init = 12;
+      }
+
+
+      if ( _steps_of_init == 12 ){
         leds.blinkOff( GREEN );
-        leds.on( GREEN );
+        epson.pfSensor( OFF );
+        _steps_of_init = 4;
       }
 
 
@@ -143,6 +168,8 @@ void PrinterMain::main()
 		_steps_of_init = 0;
 		motor.off();
 		leds.blinkOn( BLUE, 400 );
+    _printer_ready = false;
+    unsigned long _printer_off = millis();
 
 	}
 }
