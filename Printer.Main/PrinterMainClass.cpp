@@ -90,33 +90,12 @@ void PrinterMain::main()
 
       if ( btns.isPress( BTN3, SHORT ) ) motor.move( TO_START );
       if ( btns.isPress( BTN2, SHORT ) ) motor.move( TO_FINISH );
-      // if ( btns.isPress( BTN1, LONG  ) ) _steps_of_init = 7;
+      if ( btns.isPress( BTN1, LONG  ) ) _steps_of_init = 7;
 
       if ( btns.isPress( BTN3, LONGEST  ) ) _steps_of_init = 5;
       if ( btns.isPress( BTN2, LONGEST  ) ) _steps_of_init = 6;
 
 
-      if ( btns.isPress( BTN1, SHORT  ) ) {
-        encoder = new Encoder( ENCODER_A, ENCODER_B );
-        motor.oldPosition = 0;
-        leds.on( RED );
-      } else leds.off( RED );
-
-
-
-      if ( btns.isPress( BTN4, SHORT  ) ) {
-
-        long newPosition = encoder->read();
-        if ( abs(newPosition ) >= EPSON_ENCODER_DPI ) {
-          newPosition = 0;
-          encoder->write( 0 );
-        }
-       
-
-        motor.EncoderMove( newPosition );
-
-
-      }
 
 
     }
@@ -146,15 +125,16 @@ void PrinterMain::main()
       }
 
 
-      // if ( _steps_of_init == 8 ){
-      //   leds.blinkOff( ORANGE );
-      //   leds.blinkOn( GREEN, 400 );
-      //   if ( btns.isPress( BTN4, LONG ) ) _steps_of_init = 4;
-      //   if ( encoder.isStartPrinting() ) { _steps_of_init = 9;_OldMillis = millis(); epson.pfSensor( ON ); }
-      // }
+      if ( _steps_of_init == 8 ){
+        leds.blinkOff( ORANGE );
+        leds.blinkOn( GREEN, 400 );
+        if ( btns.isPress( BTN4, LONG ) ) _steps_of_init = 4;
+        if ( abs(encoder->read()) >= 500 ) { _steps_of_init = 9;_OldMillis = millis(); epson.pfSensor( ON ); }
+      }
 
       if ( _steps_of_init == 9 ){
         epson.pdSensorEmulate();
+        leds.blinkOn( GREEN, 400 );
         currentMillis = millis();
       if ( currentMillis - _OldMillis >= 100 ) { _steps_of_init = 10; _OldMillis = currentMillis; }
       }
@@ -169,11 +149,18 @@ void PrinterMain::main()
       }
 
       /****Печать****/
-      // if (_steps_of_init == 11){
-      //   leds.blinkOn( GREEN, 400 );
-      //   if ( encoder.isStep() )
-      //     if ( !motor.move( TO_START, ENCODER ) ) _steps_of_init = 12;
-      // }
+      if (_steps_of_init == 11){
+        leds.blinkOn( GREEN, 400 );
+        
+        long newPosition = encoder->read();
+        if ( abs(newPosition ) >= EPSON_ENCODER_DPI ) {
+          newPosition = 0;
+          encoder->write( 0 );
+        }
+       
+        if ( !motor.EncoderMove( newPosition ) ) _steps_of_init = 12;
+
+      }
 
 
       if ( _steps_of_init == 12 ){

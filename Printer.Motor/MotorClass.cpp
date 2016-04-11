@@ -111,7 +111,7 @@ bool MotorClass::EncoderMove( long newPosition )
         digitalWrite( MOTOR_STEP, LOW);
         digitalWrite( MOTOR_STEP, HIGH);
  
-      }
+      } else return false;
 
     }
 
@@ -133,7 +133,7 @@ bool MotorClass::EncoderMove( long newPosition )
         _current_cnt--;
         digitalWrite( MOTOR_STEP, LOW);
         digitalWrite( MOTOR_STEP, HIGH);
-      }
+      } else return false;
 
     }
 
