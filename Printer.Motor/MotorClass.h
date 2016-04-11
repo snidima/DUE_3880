@@ -19,6 +19,9 @@ class MotorClass
 		unsigned long _previousMillis_manual_move = 0;
 		bool 					_dir_manual_state = 0,
 									_step__manual_state = 0;
+		long _cnt = 0;
+
+		
 
 
 
@@ -28,11 +31,12 @@ class MotorClass
 				_current_cnt = 0,
 				_zero = 0;
 		bool _limiters_detected = 0;
+		long oldPosition = 0;
 
 		void init();
 		void on();
 		void off();		
 		bool move( bool );
-		bool move( bool, bool );
+		bool EncoderMove( long );
 		bool moveToZero( int );
 };

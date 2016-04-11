@@ -5,7 +5,6 @@
 #include <LimitersClass.h>
 #include <EncoderHelperClass.h>
 #include <Encoder.h>
-#include <UltrasonicHelperClass.h>
 
 class PrinterMain
 {
@@ -16,8 +15,7 @@ class PrinterMain
     MotorClass motor;
     BtnsClass btns;
     LimitersClass limiters;
-    EncoderHelperClass encoder;
-    UltrasonicHelperClass ultrasonic;
+    Encoder *encoder;
 
     byte _steps_of_init = 0,
          _steps_of_turn_off = 0;

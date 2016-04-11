@@ -93,22 +93,52 @@ bool MotorClass::move( bool dir )
 
 
 
-bool MotorClass::move( bool dir, bool enc )
+bool MotorClass::EncoderMove( long newPosition )
 {
 
-  if ( ( dir == 0 ) && ( _dir_manual_state == 0 ) ){
-    digitalWrite( MOTOR_DIR, LOW);
-    _dir_manual_state = 1;
+  if ( newPosition < oldPosition ){
+    oldPosition = newPosition;
+
+    long cnt = oldPosition * 100000;
+    if ( abs(cnt % 928125) <= 100000){
+
+      if ( _dir_manual_state == 0 ){
+        digitalWrite( MOTOR_DIR, LOW);
+        _dir_manual_state = 1;
+      }
+      if ( _current_cnt < _table_cnt ) {
+        _current_cnt++;
+        digitalWrite( MOTOR_STEP, LOW);
+        digitalWrite( MOTOR_STEP, HIGH);
+ 
+      }
+
+    }
+
   }
 
-  if ( dir == 0 ){
-    _current_cnt++;
-    if ( _current_cnt < _table_cnt ) {
-      digitalWrite( MOTOR_STEP, LOW);
-      digitalWrite( MOTOR_STEP, HIGH);
-      return true;
-    } else return false;
+
+
+  if ( newPosition > oldPosition ){
+    oldPosition = newPosition;
+
+    long cnt = oldPosition * 100000;
+    if ( abs(cnt % 928125) <= 100000){
+
+      if ( _dir_manual_state == 1 ){
+        digitalWrite( MOTOR_DIR, HIGH);
+        _dir_manual_state = 0;
+      }
+      if ( _current_cnt > 0 ) {
+        _current_cnt--;
+        digitalWrite( MOTOR_STEP, LOW);
+        digitalWrite( MOTOR_STEP, HIGH);
+      }
+
+    }
+
   }
+
 }
 
 bool MotorClass::moveToZero( int zero )
