@@ -10,7 +10,11 @@ void LedsClass::init()
 	pinMode( LED_RED, OUTPUT );
 	pinMode( LED_ORANGE, OUTPUT );
 	pinMode( LED_BLUE, OUTPUT );
-	pinMode( LED_GREEN, OUTPUT );
+  pinMode( LED_GREEN, OUTPUT );
+
+  pinMode( LED_RGB_RED, OUTPUT );
+  pinMode( LED_RGB_GREEN, OUTPUT );
+	pinMode( LED_RGB_BLUE, OUTPUT );
 }
 
 
@@ -23,24 +27,36 @@ bool LedsClass::checkState( byte ledname, bool action )
 	if ( action ){
 
 		if ( ledname == 0 ) 
-			if ( _red_state == false ) return true; else return false;
+			if ( _red_state == false )       return true; else return false;
 		if ( ledname == 1 ) 
-			if ( _green_state == false ) return true; else return false;
+			if ( _green_state == false )     return true; else return false;
 		if ( ledname == 2 ) 
-			if ( _blue_state == false ) return true; else return false;
+			if ( _blue_state == false )      return true; else return false;
 		if ( ledname == 3 ) 
-			if ( _orange_state == false ) return true; else return false;
+			if ( _orange_state == false )    return true; else return false;
+    if ( ledname == 4 ) 
+      if ( _rgb_red_state == true )   return true; else return false;
+    if ( ledname == 5 ) 
+      if ( _rgb_green_state == true ) return true; else return false;
+    if ( ledname == 6 ) 
+      if ( _rgb_blue_state == true )  return true; else return false;
 
 	} else {
 
 		if ( ledname == 0 ) 
-			if ( _red_state == true ) return true; else return false;
+			if ( _red_state == true )       return true; else return false;
 		if ( ledname == 1 ) 
-			if ( _green_state == true ) return true; else return false;
+			if ( _green_state == true )     return true; else return false;
 		if ( ledname == 2 ) 
-			if ( _blue_state == true ) return true; else return false;
+			if ( _blue_state == true )      return true; else return false;
 		if ( ledname == 3 ) 
-			if ( _orange_state == true ) return true; else return false;
+			if ( _orange_state == true )    return true; else return false;
+    if ( ledname == 4 ) 
+      if ( _rgb_red_state == false )   return true; else return false;
+    if ( ledname == 5 ) 
+      if ( _rgb_green_state == false ) return true; else return false;
+    if ( ledname == 6 ) 
+      if ( _rgb_blue_state == false )  return true; else return false;
 
 	}
 
@@ -78,6 +94,24 @@ void LedsClass::on( byte ledname )
     		_orange_state = !_orange_state;
     	}
     	break;
+    case 4:
+      if ( checkState( ledname, true ) ){
+        digitalWrite( LED_RGB_RED, HIGH );
+        _rgb_red_state = !_rgb_red_state;
+      }
+      break;
+    case 5:
+      if ( checkState( ledname, true ) ){
+        digitalWrite( LED_RGB_GREEN, HIGH );
+        _rgb_green_state = !_rgb_green_state;
+      }
+      break;
+    case 6:
+      if ( checkState( ledname, true ) ){
+        digitalWrite( LED_RGB_BLUE, HIGH );
+        _rgb_blue_state = !_rgb_blue_state;
+      }
+      break;
   }
 }
 
@@ -113,6 +147,24 @@ void LedsClass::off( byte ledname )
     		_orange_state = !_orange_state;
     	}
     	break;
+    case 4:
+      if ( checkState( ledname, false ) ){
+        digitalWrite( LED_RGB_RED, LOW );
+        _rgb_red_state = !_rgb_red_state;
+      }
+      break;
+    case 5:
+      if ( checkState( ledname, false ) ){
+        digitalWrite( LED_RGB_GREEN, LOW );
+        _rgb_green_state = !_rgb_green_state;
+      }
+      break;
+    case 6:
+      if ( checkState( ledname, false ) ){
+        digitalWrite( LED_RGB_BLUE, LOW );
+        _rgb_blue_state = !_rgb_blue_state;
+      }
+      break;
   }
 }
 

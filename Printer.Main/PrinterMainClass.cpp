@@ -8,6 +8,10 @@ void PrinterMain::init()
 	motor.init();	
 	btns.init();	
   limiters.init();
+
+  leds.off( RGB_RED );
+  leds.off( RGB_GREEN );
+  leds.off( RGB_BLUE );
 }
 
 
@@ -187,6 +191,43 @@ void PrinterMain::main()
 
 void PrinterMain::testMode()
 {
+  // leds.on( BLUE );
+  // delay(2000);
+  // leds.on( RED );
+  // delay(2000);
+  // leds.on( GREEN );
+  // delay(2000);
+  // leds.on( ORANGE );
+  // delay(2000);
+  // leds.on( RGB_RED );delay(2000);leds.off( RGB_RED );
+  // leds.on( RGB_GREEN );delay(2000);leds.off( RGB_GREEN );
+  // leds.on( RGB_BLUE );delay(2000);leds.off( RGB_BLUE );
+
+
+  if ( btns.isPress( BTN1, SHORT  ) )
+    leds.on(RED);
+  else
+    leds.off(RED);
+
+  if ( btns.isPress( BTN2, SHORT  ) )
+    leds.on(GREEN);
+  else
+    leds.off(GREEN);
+
+  if ( btns.isPress( BTN3, SHORT  ) )
+    leds.on(ORANGE);
+  else
+    leds.off(ORANGE);
+
+  if ( btns.isPress( BTN4, SHORT  ) )
+    leds.on(BLUE);
+  else
+    leds.off(BLUE);
+
+  if ( btns.isPress( BTN5, SHORT  ) )
+    leds.on(BLUE);
+  else
+    leds.off(BLUE);
 
 
   

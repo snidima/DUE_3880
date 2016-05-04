@@ -5,12 +5,16 @@
 #define LED_ORANGE     36
 #define LED_BLUE       38
 #define LED_GREEN      40
+#define LED_RGB_RED    32
+#define LED_RGB_GREEN  30
+#define LED_RGB_BLUE   28
 
 //Кнопки
 #define BTN_1          5
 #define BTN_2          6
 #define BTN_3          7
 #define BTN_4          8
+#define BTN_5          9
 
 //Реле
 #define RELE_DRIVER    44
@@ -64,6 +68,6 @@
 /**************ДРУГИЕ НАСТРОЙКИ**************/
 
 //Время срабатывания кнопки включения Epson, количество итераций
-#define EPSON_BTN_POWER_TIME 50000
+#define EPSON_BTN_POWER_TIME 200000
 //Время инициализации Epson, сек
 #define EPSON_READY_TIME     52

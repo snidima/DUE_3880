@@ -8,6 +8,7 @@ void BtnsClass::init()
   pinMode( BTN_2, INPUT );
   pinMode( BTN_3, INPUT );
   pinMode( BTN_4, INPUT );
+  pinMode( BTN_5, INPUT );
   
 }
 
@@ -41,6 +42,13 @@ bool BtnsClass::_isPress( byte btn, int cnt )
       if ( _btn_4 >= cnt ) return true; else return false;
     } else { _btn_4 = 0; return false; }
   } 
+
+  if ( btn == 5 ) {
+    if ( !digitalRead( BTN_5 ) ){
+      if ( _btn_5 < cnt )_btn_5++;
+      if ( _btn_5 >= cnt ) return true; else return false;
+    } else { _btn_5 = 0; return false; }
+  }
 
 }
 
