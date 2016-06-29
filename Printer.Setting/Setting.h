@@ -60,6 +60,8 @@
 #define MOTOR_SHAFT_DIAMETER 55
 //Скорость движения ШД, микросекунд на один шаг
 #define MOTOR_SPEED          270
+//Главная нулевая точка
+#define MAIN_ZERO            270
 
 
 
@@ -71,3 +73,6 @@
 #define EPSON_BTN_POWER_TIME 200000
 //Время инициализации Epson, сек
 #define EPSON_READY_TIME     52
+
+//количество столов
+#define TRAYS_COUNT 2

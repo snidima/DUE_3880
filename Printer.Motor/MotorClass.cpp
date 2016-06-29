@@ -25,9 +25,9 @@ void MotorClass::on()
   if ( _enb_state == false ){
     digitalWrite( MOTOR_ENB, HIGH);
     digitalWrite( RELE_DRIVER, HIGH);
-    delay(3000);
+    // delay(3000);
     digitalWrite( MOTOR_ENB, LOW);
-    delay(3000);
+    // delay(3000);
     _enb_state = !_enb_state;
   }
 }

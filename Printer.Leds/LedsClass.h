@@ -1,3 +1,6 @@
+#ifndef LedsClass_h_
+#define LedsClass_h_
+
 #include <Setting.h>
 #include <Arduino.h>
 
@@ -36,3 +39,6 @@ class LedsClass
 		void blinkOff( byte );
 		
 };
+
+
+#endif

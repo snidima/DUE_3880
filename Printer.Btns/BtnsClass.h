@@ -1,3 +1,6 @@
+#ifndef BtnsClass_h_
+#define BtnsClass_h_
+
 #include <Setting.h>
 #include <Arduino.h>
 
@@ -28,3 +31,7 @@ class BtnsClass
 		bool isPress( byte, int );
 			
 };
+
+
+
+#endif

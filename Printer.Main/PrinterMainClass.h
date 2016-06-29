@@ -5,6 +5,7 @@
 #include <LimitersClass.h>
 #include <EncoderHelperClass.h>
 #include <Encoder.h>
+#include <TraysClass.h>
 
 class PrinterMain
 {
@@ -16,6 +17,7 @@ class PrinterMain
     BtnsClass btns;
     LimitersClass limiters;
     Encoder *encoder;
+    TraysClass trays;
 
     byte _steps_of_init = 0,
          _steps_of_turn_off = 0;
