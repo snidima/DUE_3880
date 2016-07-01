@@ -128,7 +128,10 @@ void PrinterMain::main()
 
       if ( _steps_of_init == 7 ){
         leds.blinkOn( ORANGE, 400 );
-        if ( motor.moveToZero( trays.getZero() ) ) { _steps_of_init = 8; encoder = new Encoder( ENCODER_A, ENCODER_B ); }
+        if ( motor.moveToZero( trays.getZero() ) ) { 
+          _steps_of_init = 8; 
+          encoder = new Encoder( ENCODER_A, ENCODER_B ); 
+        }
         if ( btns.isPress( BTN4, LONG ) ) _steps_of_init = 4;
       }
 
@@ -153,25 +156,22 @@ void PrinterMain::main()
         leds.blinkOn( GREEN, 400 );
 
         currentMillis = millis();
-        if ( currentMillis - _OldMillis >= 2000 ) _steps_of_init = 11;
+        if ( currentMillis - _OldMillis >= 2500 ) {
+          _steps_of_init = 11;
+          leds.blinkOff( GREEN );
+          leds.on( GREEN );
+        }
       }
 
       /****Печать****/
-      if (_steps_of_init == 11){
-        leds.blinkOn( GREEN, 400 );
-        
-        long newPosition = encoder->read();
-        if ( abs(newPosition ) >= EPSON_ENCODER_DPI ) {
-          newPosition = 0;
-          encoder->write( 0 );
-        }
-       
-        if ( !motor.EncoderMove( newPosition ) ) _steps_of_init = 12;
+      if (_steps_of_init == 11)
+        if ( motor.EncoderMove( encoder->read() ) == false ) _steps_of_init = 12;
 
-      }
+      
 
 
       if ( _steps_of_init == 12 ){
+        leds.off( GREEN );
         leds.blinkOff( GREEN );
         epson.pfSensor( OFF );
         _steps_of_init = 4;
@@ -188,8 +188,7 @@ void PrinterMain::main()
     
 		_steps_of_init = 0;
     _printer_ready = false;
-    _printer_off = millis();
-		
+    _printer_off = millis();		
 	}
 }
 

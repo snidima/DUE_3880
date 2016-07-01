@@ -25,9 +25,7 @@ void MotorClass::on()
   if ( _enb_state == false ){
     digitalWrite( MOTOR_ENB, HIGH);
     digitalWrite( RELE_DRIVER, HIGH);
-    // delay(3000);
     digitalWrite( MOTOR_ENB, LOW);
-    // delay(3000);
     _enb_state = !_enb_state;
   }
 }
@@ -96,12 +94,13 @@ bool MotorClass::move( bool dir )
 bool MotorClass::EncoderMove( long newPosition )
 {
 
+unsigned long currentMillis = micros();
+
   if ( newPosition < oldPosition ){
     oldPosition = newPosition;
 
     long cnt = oldPosition * 100000;
     if ( abs(cnt % 928125) <= 100000){
-
       if ( _dir_manual_state == 0 ){
         digitalWrite( MOTOR_DIR, LOW);
         _dir_manual_state = 1;
@@ -110,21 +109,14 @@ bool MotorClass::EncoderMove( long newPosition )
         _current_cnt++;
         digitalWrite( MOTOR_STEP, LOW);
         digitalWrite( MOTOR_STEP, HIGH);
- 
       } else return false;
-
     }
-
   }
-
-
 
   if ( newPosition > oldPosition ){
     oldPosition = newPosition;
-
     long cnt = oldPosition * 100000;
     if ( abs(cnt % 928125) <= 100000){
-
       if ( _dir_manual_state == 1 ){
         digitalWrite( MOTOR_DIR, HIGH);
         _dir_manual_state = 0;
@@ -134,12 +126,12 @@ bool MotorClass::EncoderMove( long newPosition )
         digitalWrite( MOTOR_STEP, LOW);
         digitalWrite( MOTOR_STEP, HIGH);
       } else return false;
-
     }
-
   }
 
 }
+
+
 
 bool MotorClass::moveToZero( int zero )
 {

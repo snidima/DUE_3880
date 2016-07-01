@@ -16,7 +16,7 @@ class MotorClass
 
 		int speed = 6400 / MOTOR_STEPS_DPI * MOTOR_SPEED;
 
-		unsigned long _previousMillis_manual_move = 0;
+		unsigned long _previousMillis_manual_move = 0, _previousMillis_print_move = 0;
 		bool 					_dir_manual_state = 0,
 									_step__manual_state = 0;
 		long _cnt = 0;

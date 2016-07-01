@@ -2,7 +2,7 @@
 
 void TraysClass::init(){
   changeTray();
-  _zero = 0;
+  _zero = 9036;
 }
 
 void TraysClass::changeTray(){
@@ -13,7 +13,7 @@ void TraysClass::changeTray(){
     leds.off( RGB_RED );
     leds.on( RGB_GREEN );
     leds.on( RGB_BLUE );
-    _zero = 12000;
+    _zero = 9036;
   }
   if ( _current_tray == 1 ) {
     leds.off( RGB_GREEN );

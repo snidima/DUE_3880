@@ -10,9 +10,9 @@
 #define BTN4   4
 #define BTN5   5
 
-#define SHORT   10000
-#define LONG    50000
-#define LONGEST 200000
+#define SHORT   2000
+#define LONG    20000
+#define LONGEST 80000
 
 class BtnsClass
 {
