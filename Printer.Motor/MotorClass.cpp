@@ -90,44 +90,81 @@ bool MotorClass::move( bool dir )
 }
 
 
-
-bool MotorClass::EncoderMove( long newPosition )
+bool MotorClass::moveOneStep()
 {
+  unsigned long currentMillis = micros();
 
-unsigned long currentMillis = micros();
+  if ( currentMillis - _previousMillis_print_move >= 100 ) {
+      _previousMillis_print_move = currentMillis;
 
-  if ( newPosition < oldPosition ){
-    oldPosition = newPosition;
+      _one_step__manual_state = !_one_step__manual_state;
 
-    long cnt = oldPosition * 100000;
-    if ( abs(cnt % 928125) <= 100000){
       if ( _dir_manual_state == 0 ){
         digitalWrite( MOTOR_DIR, LOW);
         _dir_manual_state = 1;
       }
-      if ( _current_cnt < _table_cnt ) {
-        _current_cnt++;
-        digitalWrite( MOTOR_STEP, LOW);
-        digitalWrite( MOTOR_STEP, HIGH);
-      } else return false;
-    }
-  }
 
-  if ( newPosition > oldPosition ){
-    oldPosition = newPosition;
-    long cnt = oldPosition * 100000;
-    if ( abs(cnt % 928125) <= 100000){
-      if ( _dir_manual_state == 1 ){
-        digitalWrite( MOTOR_DIR, HIGH);
-        _dir_manual_state = 0;
-      }
-      if ( _current_cnt > 0 ) {
-        _current_cnt--;
-        digitalWrite( MOTOR_STEP, LOW);
-        digitalWrite( MOTOR_STEP, HIGH);
-      } else return false;
+
+        digitalWrite( MOTOR_STEP, _one_step__manual_state);
+
+        
+        if ( _one_step__manual_state ) { 
+
+          _current_cnt++;  return true; 
+
+        }
+      
+
+      
+
+  } else return false;
+
+}
+
+
+
+int MotorClass::EncoderMove( long newPosition )
+{
+
+  if ( _current_cnt >= _table_cnt ) {
+    oldPosition = 0;
+    return 0;
+  } else {
+
+    bool go = false;
+    
+    if ( newPosition < oldPosition ) { oldPosition-=1; go = true; }
+
+    if ( go ) {
+      long cnt = oldPosition * 100000;
+      if ( abs(cnt % 928125) <= 100000) steps+=1;
     }
+    
+
+    if ( steps > 0 ) 
+      if ( moveOneStep() ) { steps-=1;return 1; }
+      
+    
+    return 2;
+
   }
+  
+
+  // if ( newPosition > oldPosition ){
+  //   oldPosition = newPosition;
+  //   long cnt = oldPosition * 100000;
+  //   if ( abs(cnt % 928125) <= 100000){
+  //     if ( _dir_manual_state == 1 ){
+  //       digitalWrite( MOTOR_DIR, HIGH);
+  //       _dir_manual_state = 0;
+  //     }
+  //     if ( _current_cnt > 0 ) {
+  //       _current_cnt--;
+  //       digitalWrite( MOTOR_STEP, LOW);
+  //       digitalWrite( MOTOR_STEP, HIGH);
+  //     } else return false;
+  //   }
+  // }
 
 }
 

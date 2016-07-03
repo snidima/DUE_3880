@@ -156,22 +156,26 @@ void PrinterMain::main()
         leds.blinkOn( GREEN, 400 );
 
         currentMillis = millis();
-        if ( currentMillis - _OldMillis >= 2500 ) {
+        if ( currentMillis - _OldMillis >= 2000 ) {
           _steps_of_init = 11;
           leds.blinkOff( GREEN );
           leds.on( GREEN );
+          encoder->write(0);
         }
       }
 
       /****Печать****/
       if (_steps_of_init == 11)
-        if ( motor.EncoderMove( encoder->read() ) == false ) _steps_of_init = 12;
+          if ( motor.EncoderMove( encoder->read() ) == 0 ) _steps_of_init = 12;
+        
+      
 
       
 
 
       if ( _steps_of_init == 12 ){
         leds.off( GREEN );
+        leds.off( RED );
         leds.blinkOff( GREEN );
         epson.pfSensor( OFF );
         _steps_of_init = 4;
