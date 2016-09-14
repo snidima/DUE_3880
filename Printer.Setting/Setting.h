@@ -11,10 +11,10 @@
 
 //Кнопки
 #define BTN_1          5
-#define BTN_2          6
+#define BTN_2          9
 #define BTN_3          7
 #define BTN_4          8
-#define BTN_5          9
+#define BTN_5          6
 
 //Реле
 #define RELE_DRIVER    44

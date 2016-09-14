@@ -23,7 +23,7 @@ class PrinterMain
     unsigned long _OldMillis = 0,
                   _printer_off = 0;
 
-    bool _printer_ready = false;
+    bool _printer_ready = false, _manual_zero = false;
 
     long _oldPosition;
 
