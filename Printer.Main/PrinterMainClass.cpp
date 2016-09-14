@@ -8,7 +8,12 @@ void PrinterMain::init()
 	motor.init();	
 	btns.init();	
   limiters.init();
-  trays.init();
+
+  leds.on( BLUE );
+  leds.on( ORANGE );
+  leds.on( GREEN );
+  leds.on( RED );
+  leds.on( RGB_GREEN );
 }
 
 
@@ -89,8 +94,6 @@ void PrinterMain::main()
 
     if ( (_steps_of_init == 4) ){
 
-      trays.allowsToChange();
-
       if ( _printer_ready )
         leds.blinkOff( ORANGE );
 
@@ -128,7 +131,7 @@ void PrinterMain::main()
 
       if ( _steps_of_init == 7 ){
         leds.blinkOn( ORANGE, 400 );
-        if ( motor.moveToZero( trays.getZero() ) ) { 
+        if ( motor.moveToZero( 0 ) ) { 
           _steps_of_init = 8; 
           encoder = new Encoder( ENCODER_A, ENCODER_B ); 
         }
@@ -200,5 +203,5 @@ void PrinterMain::main()
 
 void PrinterMain::testMode()
 {
-    trays.allowsToChange();
+   
 }
