@@ -8,9 +8,6 @@ void PrinterMain::init()
 	motor.init();	
 	btns.init();	
   limiters.init();
-
-  
-
 }
 
 

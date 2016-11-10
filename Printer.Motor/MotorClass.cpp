@@ -150,21 +150,6 @@ int MotorClass::EncoderMove( long newPosition )
   }
   
 
-  // if ( newPosition > oldPosition ){
-  //   oldPosition = newPosition;
-  //   long cnt = oldPosition * 100000;
-  //   if ( abs(cnt % 928125) <= 100000){
-  //     if ( _dir_manual_state == 1 ){
-  //       digitalWrite( MOTOR_DIR, HIGH);
-  //       _dir_manual_state = 0;
-  //     }
-  //     if ( _current_cnt > 0 ) {
-  //       _current_cnt--;
-  //       digitalWrite( MOTOR_STEP, LOW);
-  //       digitalWrite( MOTOR_STEP, HIGH);
-  //     } else return false;
-  //   }
-  // }
 
 }
 
@@ -172,18 +157,21 @@ int MotorClass::EncoderMove( long newPosition )
 
 bool MotorClass::moveToZero( int zero )
 {
+	
+	if ( zero == 0 ){
+		
+		if ( !limiters.isLimit( FINISH ) ){
+			move( TO_FINISH );
+			return false;
+		} else return true;
+		
+	} else {
+		if ( !limiters.isLimit( START ) ){
+			move( TO_START );
+			return false;
+		} else return true;
+	}
 
-  if ( _current_cnt != zero ){
-
-    if ( _current_cnt < zero )
-      move( TO_START );
-
-    if ( _current_cnt > zero )
-      move( TO_FINISH );
-
-    return false;
-
-  } else return true;
   
 }
 
